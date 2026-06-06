@@ -1,8 +1,23 @@
+# === Sistema Operacional ===
 .DS_Store
-/.build
-/Packages
-xcuserdata/
+.Trash/
+*.swp
+*~
+
+# === Swift Package Manager (SPM) & Linux ===
+.build/
+/.build/
+.swiftpm/
+/Packages/
+
+# === Xcode & Mac (Se abrir o projeto no Mac) ===
 DerivedData/
-.swiftpm/configuration/registries.json
-.swiftpm/xcode/package.xcworkspace/contents.xcworkspacedata
+*.xcodeproj/
+*.xcworkspace/
+.xcschemes/
+xcuserdata/
+
+# === Credenciais e Segurança ===
 .netrc
+.env
+.env.*
