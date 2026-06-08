@@ -33,6 +33,7 @@ func lerEntradaDoTeclado() -> String? {
 
 //  LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
 let viewModel = AudioViewModel(audioService: AudioService(apiClient: APIClient()))
+let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: APIClient()))
 var listaHistorico: [AudioMonitorModel] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
@@ -40,12 +41,16 @@ print("Iniciando conexão com a API de telemetria...")
 
 while true {
     await viewModel.callAudioEndpoint()
-    let novosDados = viewModel.audioDomain
-    guard let novosDados = novosDados else {
+    await powerViewModel.callPowerData()
+    let audioDomainData = viewModel.audioDomain
+    guard let audioDomainData = audioDomainData else {
+        continue
+    }
+    guard let powerDomainData = powerViewModel.powerDomain else {
         continue
     }
 
-    listaHistorico.append(novosDados)
+    listaHistorico.append(audioDomainData)
     if listaHistorico.count > 10 {
         listaHistorico.removeFirst()
     }
@@ -55,20 +60,25 @@ while true {
             telaAtualAtiva = .history
         } else if tecla == "1" {
             telaAtualAtiva = .liveMonitor
+        } else if tecla == "3" {
+            telaAtualAtiva = .power
         }
     }
     
     switch telaAtualAtiva {
     case .liveMonitor:
-        let telaMonitor = AudioMonitorView(dados: novosDados)
+        let telaMonitor = AudioMonitorView(dados: audioDomainData)
         Preview.show(telaMonitor)
-        print("\n[Pressione '2' (sem ENTER) para ir para o Histórico]")
-        
+        print("\n[Pressione '2' (sem ENTER) para ir para o Histórico]")     
     case .history:
         let telaHistorico = HistoryVuew(historyList: listaHistorico)
         Preview.show(telaHistorico)
         print("\n[Pressione '1' (sem ENTER) para voltar ao Monitoramento]")
+    case .power:
+    let screenPower = PowerView(powerData: powerDomainData)
+        Preview.show(screenPower)
+        print("\n[Pressione '3' (sem ENTER) para ir ao POWER]")
     }
-    
+        
     try? await Task.sleep(nanoseconds: 1_000_000_000)
 }
