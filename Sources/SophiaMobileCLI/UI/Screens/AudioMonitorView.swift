@@ -1,9 +1,9 @@
 import Foundation
 
 struct AudioMonitorView: View {
-    let dados: AudioMonitorContrato
+    let dados: AudioMonitorModel
     
-    init(dados: AudioMonitorContrato) {
+    init(dados: AudioMonitorModel) {
         self.dados = dados
     }
     

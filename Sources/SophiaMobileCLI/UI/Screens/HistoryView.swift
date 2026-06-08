@@ -1,7 +1,7 @@
 import Foundation
 
 struct HistoryVuew: View {
-    let historyList: [AudioMonitorContrato]
+    let historyList: [AudioMonitorModel]
     
     func render() -> String {
         var output = ""

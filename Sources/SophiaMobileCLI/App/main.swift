@@ -1,26 +1,7 @@
 import Foundation
 import FoundationNetworking // OBRIGATÓRIO no Linux para usar o URLSession.shared
 
-// 1. CONTRATO
-struct AudioMonitorContrato: Codable, Sendable {
-    let domain: String
-    let status: String
-    let noiseFloor: Int
-    let currentLevel: Int
-    let classification: String
-    let confidence: Double
-    let timestamp: String
-
-    enum CodingKeys: String, CodingKey {
-        case domain, status, classification, confidence, timestamp
-        case noiseFloor = "noise_floor"
-        case currentLevel = "current_level"
-    }
-}
-
-// 2. SERVIÇO (ASYNC ACTOR)
-
-// 3. MÓDULO AUXILIAR DE ENTRADA NÃO-BLOQUEANTE
+// MÓDULO AUXILIAR DE ENTRADA NÃO-BLOQUEANTE
 func lerEntradaDoTeclado() -> String? {
     var raw = termios()
     tcgetattr(STDIN_FILENO, &raw)
@@ -50,9 +31,9 @@ func lerEntradaDoTeclado() -> String? {
         ╚══════════════════════════════╝
         """)
 
-// 4. LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
+//  LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
 let viewModel = AudioViewModel(audioService: AudioService(apiClient: APIClient()))
-var listaHistorico: [AudioMonitorContrato] = []
+var listaHistorico: [AudioMonitorModel] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
 print("Iniciando conexão com a API de telemetria...")

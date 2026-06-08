@@ -2,7 +2,7 @@ import Foundation
 
 final class AudioViewModel {
     private let audioService: AudioService
-    public var audioDomain: AudioMonitorContrato?
+    public var audioDomain: AudioMonitorModel?
     
     init(audioService: AudioService) {
         self.audioService = audioService

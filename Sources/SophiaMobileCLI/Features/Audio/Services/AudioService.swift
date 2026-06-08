@@ -7,8 +7,8 @@ final class AudioService {
         self.apiClient = apiClient
     }
 
-    func getAudioDomain()async throws -> AudioMonitorContrato {
-        try await apiClient.request(endpoint: "/cognition/audio", type: AudioMonitorContrato.self)
+    func getAudioDomain()async throws -> AudioMonitorModel {
+        try await apiClient.request(endpoint: "/cognition/audio", type: AudioMonitorModel.self)
     }
 }
 
