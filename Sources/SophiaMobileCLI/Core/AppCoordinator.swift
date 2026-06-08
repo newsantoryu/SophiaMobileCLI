@@ -5,6 +5,7 @@ enum Screen: Sendable {
     case liveMonitor
     case history
     case power
+    case domains
 }
 
 //O Coordinator atua com o seu NavigationStack, (Trhead-safe via Actor) 

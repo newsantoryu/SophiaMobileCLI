@@ -34,6 +34,7 @@ func lerEntradaDoTeclado() -> String? {
 //  LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
 let viewModel = AudioViewModel(audioService: AudioService(apiClient: APIClient()))
 let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: APIClient()))
+let domainsViewModel = DomainsViewModel(domainsService: DomainsService(apiClient: APIClient()))
 var listaHistorico: [AudioMonitorModel] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
@@ -42,11 +43,15 @@ print("Iniciando conexão com a API de telemetria...")
 while true {
     await viewModel.callAudioEndpoint()
     await powerViewModel.callPowerData()
+    await  domainsViewModel.callDomainsEndpoint()
     let audioDomainData = viewModel.audioDomain
     guard let audioDomainData = audioDomainData else {
         continue
     }
     guard let powerDomainData = powerViewModel.powerDomain else {
+        continue
+    }
+    guard let domainsData = domainsViewModel.domainsData else {
         continue
     }
 
@@ -62,6 +67,8 @@ while true {
             telaAtualAtiva = .liveMonitor
         } else if tecla == "3" {
             telaAtualAtiva = .power
+        } else if tecla == "4" {
+            telaAtualAtiva = .domains
         }
     }
     
@@ -78,6 +85,10 @@ while true {
     let screenPower = PowerView(powerData: powerDomainData)
         Preview.show(screenPower)
         print("\n[Pressione '3' (sem ENTER) para ir ao POWER]")
+    case .domains:
+    let screenDomains = DomainsView(domainsData: domainsData)
+    Preview.show(screenDomains)
+        print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
     }
         
     try? await Task.sleep(nanoseconds: 1_000_000_000)
