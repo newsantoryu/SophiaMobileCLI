@@ -19,38 +19,6 @@ struct AudioMonitorContrato: Codable, Sendable {
 }
 
 // 2. SERVIÇO (ASYNC ACTOR)
-actor AudioAPIService {
-   private let apiURL = URL(string:"http://127.0.0.1:8000/cognition/audio/")!
-
-    func buscarTelemetriaEmTempoReal() async -> AudioMonitorContrato {
-        do {
-            let (data, response) = try await URLSession.shared.data(from: apiURL)
-            guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
-                print("Resposta inválida da API: \(response)")
-                return gerarDadosDeFallback(erro: "Resposta inválida (status code não 200)")
-            }
-            let decoder = JSONDecoder()
-            let contract = try decoder.decode(AudioMonitorContrato.self, from: data)
-            return contract
-        } catch {
-            print("Erro ao buscar dados da API: \(error)")
-            return gerarDadosDeFallback(erro: error.localizedDescription)
-        }
-    }
-
-    private func gerarDadosDeFallback(erro: String) -> AudioMonitorContrato {
-        let dataString = ISO8601DateFormatter().string(from: Date())
-        return AudioMonitorContrato(
-            domain: "audio",
-            status: "ERRO DE CONEXÃO",
-            noiseFloor: 0,
-            currentLevel: 0,
-            classification: "Desconectado (\(erro))",
-            confidence: 0.0,
-            timestamp: dataString
-        )
-    }
-}
 
 // 3. MÓDULO AUXILIAR DE ENTRADA NÃO-BLOQUEANTE
 func lerEntradaDoTeclado() -> String? {
@@ -75,16 +43,27 @@ func lerEntradaDoTeclado() -> String? {
     return caractere
 }
 
+     print("""
+        ╔══════════════════════════════╗
+        ║      SOPHIA MOBILE CLI       ║
+        ║          v0.1.0              ║
+        ╚══════════════════════════════╝
+        """)
+
 // 4. LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
-let api = AudioAPIService()
+let viewModel = AudioViewModel(audioService: AudioService(apiClient: APIClient()))
 var listaHistorico: [AudioMonitorContrato] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
 print("Iniciando conexão com a API de telemetria...")
 
 while true {
-    let novosDados = await api.buscarTelemetriaEmTempoReal()
-    
+    await viewModel.callAudioEndpoint()
+    let novosDados = viewModel.audioDomain
+    guard let novosDados = novosDados else {
+        continue
+    }
+
     listaHistorico.append(novosDados)
     if listaHistorico.count > 10 {
         listaHistorico.removeFirst()
