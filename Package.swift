@@ -17,6 +17,11 @@ let package = Package(
         .testTarget(
             name: "SophiaMobileCLITests",
             dependencies: ["SophiaMobileCLI"]
+        ),
+        .testTarget(
+            name: "SophiaMobileCLIEstudos",
+            dependencies: ["SophiaMobileCLI"]
         )
+        
     ]
 )

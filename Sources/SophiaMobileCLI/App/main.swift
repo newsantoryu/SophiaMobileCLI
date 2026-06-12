@@ -23,7 +23,7 @@ func lerEntradaDoTeclado() -> String? {
     tcsetattr(STDIN_FILENO, TCSANOW, &raw)
     return caractere
 }
-
+let apiClient = APIClient()
      print("""
         ╔══════════════════════════════╗
         ║      SOPHIA MOBILE CLI       ║
@@ -32,9 +32,9 @@ func lerEntradaDoTeclado() -> String? {
         """)
 
 //  LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
-let viewModel = AudioViewModel(audioService: AudioService(apiClient: APIClient()))
-let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: APIClient()))
-let domainsViewModel = DomainsViewModel(domainsService: DomainsService(apiClient: APIClient()))
+let viewModel = AudioViewModel(audioService: AudioService(apiClient: apiClient))
+let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: apiClient))
+let domainsViewModel = DomainsViewModel(domainsService: DomainsService(apiClient: apiClient))
 var listaHistorico: [AudioMonitorModel] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
@@ -91,5 +91,5 @@ while true {
         print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
     }
         
-    try? await Task.sleep(nanoseconds: 1_000_000_000)
+    try? await Task.sleep(nanoseconds: 3_000_000_000)
 }
