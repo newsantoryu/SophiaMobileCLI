@@ -35,6 +35,7 @@ let apiClient = APIClient()
 let viewModel = AudioViewModel(audioService: AudioService(apiClient: apiClient))
 let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: apiClient))
 let domainsViewModel = DomainsViewModel(domainsService: DomainsService(apiClient: apiClient))
+let insightsViewModel: InsightsViewModel = InsightsViewModel(service: InsightsServices(apiClient: apiClient))
 var listaHistorico: [AudioMonitorModel] = []
 var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em AppCoordinator.swift
 
@@ -44,6 +45,7 @@ while true {
     await viewModel.callAudioEndpoint()
     await powerViewModel.callPowerData()
     await  domainsViewModel.callDomainsEndpoint()
+    await insightsViewModel.callInsightRequest()
     let audioDomainData = viewModel.audioDomain
     guard let audioDomainData = audioDomainData else {
         continue
@@ -52,6 +54,9 @@ while true {
         continue
     }
     guard let domainsData = domainsViewModel.domainsData else {
+        continue
+    }
+    guard let insightData = insightsViewModel.insight else {
         continue
     }
 
@@ -69,6 +74,8 @@ while true {
             telaAtualAtiva = .power
         } else if tecla == "4" {
             telaAtualAtiva = .domains
+        } else if tecla == "q" {
+            telaAtualAtiva = .insights
         }
     }
     
@@ -89,6 +96,10 @@ while true {
     let screenDomains = DomainsView(domainsData: domainsData)
     Preview.show(screenDomains)
         print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
+    case .insights:
+    let screenInsights = InsightsView(insightData: insightData)
+        Preview.show(screenInsights)
+        print("\n[Pressione 'q' (sem ENTER) para ir ao Insights]")
     }
         
     try? await Task.sleep(nanoseconds: 3_000_000_000)
