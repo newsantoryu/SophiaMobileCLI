@@ -12,6 +12,7 @@ final class InsightsViewModel {
 
     func callInsightRequest()async {
         errorDescription = nil
+        insight = nil
        do {
             let model = try await service.requestInsights()
             self.insight = model

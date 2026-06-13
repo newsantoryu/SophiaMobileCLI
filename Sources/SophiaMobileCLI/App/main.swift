@@ -99,6 +99,12 @@ while true {
         let screenInsights: InsightsView = InsightsView(insightData: insightData)
         Preview.show(screenInsights)
         print("\n[Pressione 'q' (sem ENTER) para ir ao Insights]")
+    } else {
+        if insightsViewModel.errorDescription != nil {
+            Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO: \(insightsViewModel.errorDescription!)", screenName: "TELA INSIGHTS GEROU ERROR"))
+        } else {
+            Preview.show(AlertView(message: "Nao veio os dados... =/"))
+        }
     }
     }
         
