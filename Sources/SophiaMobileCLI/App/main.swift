@@ -42,12 +42,6 @@ var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em App
 print("Iniciando conexão com a API de telemetria...")
 
 while true {
-    async let audio =  viewModel.callAudioEndpoint()
-    async let power = powerViewModel.callPowerData()
-    async let domain =  domainsViewModel.callDomainsEndpoint()
-    async let insight = insightsViewModel.callInsightRequest()
-
-   _ = await (audio, power, domain, insight)
 
     if let audioDomainData = viewModel.audioDomain {
         listaHistorico.append(audioDomainData)
@@ -55,19 +49,21 @@ while true {
              listaHistorico.removeFirst()
        }
     }
-    
-    
     if let tecla = lerEntradaDoTeclado() {
         if tecla == "2" {
             telaAtualAtiva = .history
         } else if tecla == "1" {
             telaAtualAtiva = .liveMonitor
+            await viewModel.callAudioEndpoint()
         } else if tecla == "3" {
             telaAtualAtiva = .power
+           await powerViewModel.callPowerData()
         } else if tecla == "4" {
             telaAtualAtiva = .domains
+            await domainsViewModel.callDomainsEndpoint()
         } else if tecla == "q" {
             telaAtualAtiva = .insights
+            await insightsViewModel.callInsightRequest()
         }
     }
     
