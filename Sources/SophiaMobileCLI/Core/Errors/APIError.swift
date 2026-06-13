@@ -12,7 +12,7 @@ enum APIError: Error, CustomStringConvertible {
         case .networkError(let message):
             return "Erro de rede: \(message)"
         case .decodingError(let message):
-            return "Erro de decodificação: \(message)"
+            return "Erro de decodificação: \(message) \n Os dados recebidos do servidor estão incompletos ou incompatíveis"
         }
     }
 }
