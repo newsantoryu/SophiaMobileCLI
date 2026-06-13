@@ -89,6 +89,12 @@ while true {
         let screenDomains = DomainsView(domainsData: domainsData)
         Preview.show(screenDomains)
         print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
+    } else {
+        if domainsViewModel.errorDescription != nil {
+            Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO: \(domainsViewModel.errorDescription!)", screenName: "TELA DOMAINS GEROU ERROR"))
+        } else {
+            Preview.show(AlertView(message: "Nao veio os dados... =/"))
+        }
     }
     case .insights:
     if let insightData = insightsViewModel.insight {
