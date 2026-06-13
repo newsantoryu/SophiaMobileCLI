@@ -1,6 +1,6 @@
 import Foundation
 
-final class DomainsService {
+final class DomainsService:Sendable {
     private let apiClient: APIClientProtocol
 
     init(apiClient: APIClientProtocol) {

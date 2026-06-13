@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 final class PowerViewModel {
     private let powerService: PowerService
     var powerDomain: PowerModel?

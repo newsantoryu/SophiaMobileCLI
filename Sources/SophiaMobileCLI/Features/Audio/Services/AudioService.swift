@@ -1,6 +1,6 @@
 import Foundation
 
-final class AudioService {
+final class AudioService:Sendable {
     private let apiClient: APIClientProtocol
 
     init(apiClient: APIClientProtocol) {

@@ -1,6 +1,6 @@
 import Foundation
 
-final class PowerService {
+final class PowerService:Sendable {
     private let apiClient: APIClient
     
     init(apiClient: APIClient) {

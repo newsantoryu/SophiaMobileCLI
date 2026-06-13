@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 final class DomainsViewModel{
     let domainsService: DomainsService
     var domainsData: [DomainsModel]?

@@ -1,6 +1,6 @@
 import Foundation
 
-protocol APIClientProtocol {
+protocol APIClientProtocol:Sendable {
     func request<Response: Decodable>(
         endpoint: String, 
         type:Response.Type

@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 final class AudioViewModel {
     private let audioService: AudioService
     public var audioDomain: AudioMonitorModel?

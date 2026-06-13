@@ -42,28 +42,20 @@ var telaAtualAtiva: Screen = .liveMonitor // Usa o tipo original definido em App
 print("Iniciando conexão com a API de telemetria...")
 
 while true {
-    await viewModel.callAudioEndpoint()
-    await powerViewModel.callPowerData()
-    await  domainsViewModel.callDomainsEndpoint()
-    await insightsViewModel.callInsightRequest()
-    let audioDomainData = viewModel.audioDomain
-    guard let audioDomainData = audioDomainData else {
-        continue
-    }
-    guard let powerDomainData = powerViewModel.powerDomain else {
-        continue
-    }
-    guard let domainsData = domainsViewModel.domainsData else {
-        continue
-    }
-    guard let insightData = insightsViewModel.insight else {
-        continue
-    }
+    async let audio =  viewModel.callAudioEndpoint()
+    async let power = powerViewModel.callPowerData()
+    async let domain =  domainsViewModel.callDomainsEndpoint()
+    async let insight = insightsViewModel.callInsightRequest()
 
-    listaHistorico.append(audioDomainData)
-    if listaHistorico.count > 10 {
-        listaHistorico.removeFirst()
+   _ = await (audio, power, domain, insight)
+
+    if let audioDomainData = viewModel.audioDomain {
+        listaHistorico.append(audioDomainData)
+          if listaHistorico.count > 10 {
+             listaHistorico.removeFirst()
+       }
     }
+    
     
     if let tecla = lerEntradaDoTeclado() {
         if tecla == "2" {
@@ -81,25 +73,33 @@ while true {
     
     switch telaAtualAtiva {
     case .liveMonitor:
+    if let audioDomainData = viewModel.audioDomain {
         let telaMonitor = AudioMonitorView(dados: audioDomainData)
         Preview.show(telaMonitor)
-        print("\n[Pressione '2' (sem ENTER) para ir para o Histórico]")     
+        print("\n[Pressione '2' (sem ENTER) para ir para o Histórico]")
+    }   
     case .history:
-        let telaHistorico = HistoryVuew(historyList: listaHistorico)
+    let telaHistorico = HistoryVuew(historyList: listaHistorico)
         Preview.show(telaHistorico)
         print("\n[Pressione '1' (sem ENTER) para voltar ao Monitoramento]")
     case .power:
-    let screenPower = PowerView(powerData: powerDomainData)
+    if let powerDomainData = powerViewModel.powerDomain {
+        let screenPower = PowerView(powerData: powerDomainData)
         Preview.show(screenPower)
         print("\n[Pressione '3' (sem ENTER) para ir ao POWER]")
+    }
     case .domains:
-    let screenDomains = DomainsView(domainsData: domainsData)
-    Preview.show(screenDomains)
+    if let domainsData = domainsViewModel.domainsData {
+        let screenDomains = DomainsView(domainsData: domainsData)
+        Preview.show(screenDomains)
         print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
+    }
     case .insights:
-    let screenInsights: InsightsView = InsightsView(insightData: insightData)
+    if let insightData = insightsViewModel.insight {
+        let screenInsights: InsightsView = InsightsView(insightData: insightData)
         Preview.show(screenInsights)
         print("\n[Pressione 'q' (sem ENTER) para ir ao Insights]")
+    }
     }
         
     try? await Task.sleep(nanoseconds: 3_000_000_000)

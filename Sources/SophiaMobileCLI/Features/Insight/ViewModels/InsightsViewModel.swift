@@ -1,5 +1,6 @@
 import Foundation
 
+@MainActor
 final class InsightsViewModel {
     let service:InsightsServices
     var insight: InsightModel?
