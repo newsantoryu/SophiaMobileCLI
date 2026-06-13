@@ -1,6 +1,6 @@
 import Foundation
 
-final class InsightsServices:Sendable {
+final class InsightsServices:InsightServicing {
 
     let apiClient: APIClientProtocol
 

@@ -13,7 +13,18 @@ final class APIClient: APIClientProtocol {
         guard let url = URL(string: endpoint, relativeTo: enviroment.baseUrl ) else {
             throw APIError.invalidResponse
         }
-        let (data, _) = try await URLSession.shared.data(from: url)
+        let (data, response) = try await URLSession.shared.data(from: url)
+        guard let httpResponse = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+        // Verificar se a resposta HTTP gerou o erro para ser tratado e modelado para view de acordo com seu problema
+        if  !(200...299).contains(httpResponse.statusCode){
+            if let errorModel = try? JSONDecoder().decode(FastApiError.self, from: data) {
+                throw APIError.networkError(errorModel.detail)
+            } else {
+                throw APIError.networkError("Erro no Servidor: \(httpResponse.statusCode)")
+            }
+        }
         let decoder = JSONDecoder()
         return try decoder.decode(Response.self, from: data)
     }
