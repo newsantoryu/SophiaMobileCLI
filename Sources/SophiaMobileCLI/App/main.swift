@@ -97,7 +97,7 @@ while true {
     Preview.show(screenDomains)
         print("\n[Pressione '4' (sem ENTER) para ir ao Domains]")
     case .insights:
-    let screenInsights = InsightsView(insightData: insightData)
+    let screenInsights: InsightsView = InsightsView(insightData: insightData)
         Preview.show(screenInsights)
         print("\n[Pressione 'q' (sem ENTER) para ir ao Insights]")
     }

@@ -6,10 +6,9 @@ struct InsightsView: View {
     init(insightData:InsightModel){
         self.insightData = insightData
     }
- 
 
     func render() -> String  {
-        VStack([
+        VStack([ 
             HStack([
                  Text("INSIGHT:").bold(),
                  Text(insightData.insight).bold().foregroundColor(.green)
