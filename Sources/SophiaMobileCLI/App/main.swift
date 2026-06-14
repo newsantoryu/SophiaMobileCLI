@@ -83,6 +83,12 @@ while true {
         let screenPower = PowerView(powerData: powerDomainData)
         Preview.show(screenPower)
         print("\n[Pressione '3' (sem ENTER) para ir ao POWER]")
+    } else {
+        if powerViewModel.powerDomain != nil {
+            Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO \(powerViewModel.errorDescription!)", screenName: "TELA POWER GEROU ERROR"))
+        } else {
+            Preview.show(AlertView(message: "Nao veio dados =Z Algum problema na API"  ))
+        }
     }
     case .domains:
     if let domainsData = domainsViewModel.domainsData {
@@ -93,7 +99,7 @@ while true {
         if domainsViewModel.errorDescription != nil {
             Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO: \(domainsViewModel.errorDescription!)", screenName: "TELA DOMAINS GEROU ERROR"))
         } else {
-            Preview.show(AlertView(message: "Nao veio os dados... =/"))
+            Preview.show(AlertView(message: "Nao veio os dados... =/  Algum problema na API"))
         }
     }
     case .insights:
@@ -105,7 +111,7 @@ while true {
         if insightsViewModel.errorDescription != nil {
             Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO: \(insightsViewModel.errorDescription!)", screenName: "TELA INSIGHTS GEROU ERROR"))
         } else {
-            Preview.show(AlertView(message: "Nao veio os dados... =/"))
+            Preview.show(AlertView(message: "Nao veio os dados... =/  Algum problema na API"))
         }
     }
     }

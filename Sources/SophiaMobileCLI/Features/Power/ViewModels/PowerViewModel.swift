@@ -4,6 +4,7 @@ import Foundation
 final class PowerViewModel {
     private let powerService: PowerService
     var powerDomain: PowerModel?
+    var errorDescription:String?
     
     init(powerService: PowerService) {
         self.powerService = powerService
@@ -12,10 +13,16 @@ final class PowerViewModel {
     func callPowerData() async  {
         do {
             let powerDomain = try await powerService.getPowerDomain()
-            print("Power Domain: \(powerDomain)")
             self.powerDomain = powerDomain  
         } catch {
-            print("Error fetching power domain: \(error)")
+            switch error {
+                case .invalidResponse:
+                    self.errorDescription = "Resposta invalida"
+                case .networkError(let message): 
+                    self.errorDescription = message
+                case .decodingError(let message):
+                    self.errorDescription = message
+            }
         }
     }
 }
