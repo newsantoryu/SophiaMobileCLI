@@ -73,6 +73,12 @@ while true {
         let telaMonitor = AudioMonitorView(dados: audioDomainData)
         Preview.show(telaMonitor)
         print("\n[Pressione '2' (sem ENTER) para ir para o Histórico]")
+    } else {
+        if viewModel.audioDomain != nil {
+            Preview.show(ErrorView(errorDescription: "A API RETORNOU O ERRO \(viewModel.errorDescription!)", screenName: "A TELA AUDIO GEROU ERROR"))
+        } else {
+            Preview.show(AlertView(message: "NAO VEIO DADOS =[ ALGUM PROBLEMA NA API]"))
+        }
     }   
     case .history:
     let telaHistorico = HistoryVuew(historyList: listaHistorico)
