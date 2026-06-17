@@ -9,7 +9,7 @@ final class PowerService:PowerServicing {
     
     func getPowerDomain() async throws(APIError) -> PowerModel {
         do {
-            let powerData = try await apiClient.request(endpoint: "/cognition/power", type: PowerModel.self)
+            let powerData = try await apiClient.request(endpoint: "/cognition/power", method: .get, type: PowerModel.self)
             return powerData
         } catch let error as APIError {
             throw error

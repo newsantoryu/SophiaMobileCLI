@@ -9,7 +9,7 @@ final class DomainsService: DomainServicing {
 
     func requestDomainsData() async throws(APIError) -> [DomainsModel] {
         do {
-            let response: [DomainsModel] = try await apiClient.request(endpoint: "/domains", type: [DomainsModel].self)
+            let response: [DomainsModel] = try await apiClient.request(endpoint: "/domains", method: .get, type: [DomainsModel].self)
             return response
         } catch let error as APIError {
             throw error

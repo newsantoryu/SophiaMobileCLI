@@ -10,7 +10,7 @@ final class InsightsServices:InsightServicing {
 
     func requestInsights() async throws(APIError) -> InsightModel {
         do {
-            let response: InsightModel = try await apiClient.request(endpoint: "/insights/latest", type: InsightModel.self)
+            let response: InsightModel = try await apiClient.request(endpoint: "/insights/latest", method: .get, type: InsightModel.self)
             return response
         } catch let error as APIError {
             throw error

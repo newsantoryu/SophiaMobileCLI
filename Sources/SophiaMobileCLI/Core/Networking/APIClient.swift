@@ -9,11 +9,13 @@ final class APIClient: APIClientProtocol {
         self.enviroment = enviroment
     }
 
-    func request<Response: Decodable>(endpoint: String, type: Response.Type) async throws -> Response {
+    func request<Response: Decodable>(endpoint: String, method: HTTPMethod ,type: Response.Type) async throws -> Response {
         guard let url = URL(string: endpoint, relativeTo: enviroment.baseUrl ) else {
             throw APIError.invalidResponse
         }
-        let (data, response) = try await URLSession.shared.data(from: url)
+        var request = URLRequest(url: url)
+        request.httpMethod = method.rawValue
+        let (data, response) = try await URLSession.shared.data(for: request)
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse
         }

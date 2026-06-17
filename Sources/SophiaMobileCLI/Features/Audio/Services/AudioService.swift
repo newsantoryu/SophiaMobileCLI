@@ -9,7 +9,7 @@ final class AudioService:AudioServicing {
 
     func getAudioDomain()async throws(APIError) -> AudioMonitorModel {
         do {
-            let audio = try await apiClient.request(endpoint: "/cognition/audio", type: AudioMonitorModel.self)
+            let audio = try await apiClient.request(endpoint: "/cognition/audio", method: .get, type: AudioMonitorModel.self)
             return audio
         } catch let error as APIError {
             throw error

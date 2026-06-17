@@ -1,6 +1,6 @@
 import Foundation
 
-enum APIError: Error, CustomStringConvertible {
+enum APIError: Error, CustomStringConvertible, Sendable {
     case invalidResponse
     case networkError(String)
     case decodingError(String)
