@@ -9,7 +9,7 @@ struct ApiClientMock:APIClientProtocol, Sendable {
         self.result = result
     }
     
-    func request<Response>(endpoint: String, type: Response.Type) async throws -> Response where Response : Decodable {
+    func request<Response>(endpoint: String,method: HTTPMethod, type: Response.Type) async throws -> Response where Response : Decodable { 
         switch result {
             case .success(let value):
                 guard let responseValue = value as? Response else {

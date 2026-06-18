@@ -1,6 +1,6 @@
 import Foundation
 
-struct AudioMonitorModel: Codable, Sendable {
+struct AudioMonitorModel: Codable, Sendable, Equatable {
     let domain: String
     let status: String
     let noiseFloor: Int
