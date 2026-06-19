@@ -52,3 +52,47 @@ retorna corretamente
         #expect(error == errorMock)
     }
 }
+
+@Test func throwsInvalidResponseWhenApiReturnsInvalidResponse() async throws {
+    
+    //ARRANGE
+    let errorMock = APIError.invalidResponse
+    let apiClientMock = ApiClientMock(result: .failure(errorMock))
+    let sut = AudioService(apiClient: apiClientMock)
+
+    //ACT
+    do {
+       _ = try await sut.getAudioDomain()
+       Issue.record(
+            "Esperava APIError.invalidResponse mas nenhum erro foi lançado"
+        )
+    //ASSERT   
+    } catch let error {
+        #expect(error == errorMock)
+    }
+}
+
+    @Test func translatesDecodingErrorToAPIError() async throws {
+        
+        //ARRANGE
+        let decodingError = DecodingError.typeMismatch(String.self, .init(codingPath: [], debugDescription: "Erro de decodificação: \n Os dados recebidos do servidor estão incompletos ou incompatíveis"))
+        let apiClientMock = ApiClientMock(result: .failure(decodingError))
+        let sut = AudioService(apiClient: apiClientMock)
+
+        //ACT
+        do {
+            _ = try await sut.getAudioDomain()
+            Issue.record(
+                "Esperava APIError.invalidResponse mas nenhum erro foi lançado"
+            )
+        } catch let error     {
+            switch error {
+                case .decodingError(let message):
+                    #expect(message.contains(ErrorMessages.decodingError))
+                default:
+                    Issue.record(
+                        "Esperava APIError.decoding mas nenhum erro foi lançado"
+                    )
+            }
+        }
+    }
