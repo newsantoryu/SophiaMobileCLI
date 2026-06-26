@@ -2,11 +2,11 @@ import Foundation
 
 @MainActor
 final class InsightsViewModel {
-    let service:InsightsServices
+    let service:InsightServicing
     var insight: InsightModel?
     var errorDescription: String?
 
-    init(service: InsightsServices) {
+    init(service: InsightServicing) {
         self.service = service
     }
 

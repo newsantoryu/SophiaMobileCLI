@@ -2,11 +2,11 @@ import Foundation
 
 @MainActor
 final class DomainsViewModel: Sendable {
-    let domainsService: DomainsService
+    let domainsService: DomainServicing
     var domainsData: [DomainsModel]?
     var errorDescription: String?
 
-    init(domainsService: DomainsService) {
+    init(domainsService: DomainServicing) {
         self.domainsService = domainsService        
 
     }

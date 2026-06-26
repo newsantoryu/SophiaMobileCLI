@@ -32,7 +32,9 @@ let apiClient = APIClient()
         """)
 
 //  LOOP DE ORQUESTRAÇÃO ASSÍNCRONA
-let viewModel = AudioViewModel(audioService: AudioService(apiClient: apiClient))
+let viewModel = AudioViewModel(
+    service: AudioService(apiClient: apiClient)
+    )
 let powerViewModel = PowerViewModel(powerService: PowerService(apiClient: apiClient))
 let domainsViewModel = DomainsViewModel(domainsService: DomainsService(apiClient: apiClient))
 let insightsViewModel: InsightsViewModel = InsightsViewModel(service: InsightsServices(apiClient: apiClient))

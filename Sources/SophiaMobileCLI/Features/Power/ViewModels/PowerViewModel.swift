@@ -2,11 +2,11 @@ import Foundation
 
 @MainActor
 final class PowerViewModel {
-    private let powerService: PowerService
+    private let powerService: PowerServicing
     var powerDomain: PowerModel?
     var errorDescription:String?
     
-    init(powerService: PowerService) {
+    init(powerService: PowerServicing) {
         self.powerService = powerService
     }
     
